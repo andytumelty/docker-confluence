@@ -1,0 +1,20 @@
+confluence:
+  image: cptactionhank/atlassian-confluence
+  ports:
+    - "7090:8090"
+  links:
+    - postgres
+  volumes:
+    # /var/atlassian/confluence is the confluence home directory
+    - /data/confluence:/var/atlassian/confluence
+    # /opt/atlassian/confluence/conf is a subset of the application directory
+    # that unsurprisingly contains application configuration
+    # Splitting this out ensures configuration for things like proxies in
+    # server.xml are persisted across container updates
+    - /data/confluence-conf:/opt/atlassian/confluence/conf
+postgres:
+  image: postgres
+  environment:
+    # You might want to change these to something else
+    - POSTGRES_USER=confluence
+    - POSTGRES_PASSWORD=confluence
